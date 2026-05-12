@@ -5,9 +5,9 @@ shift+alt+ down arrow key = The line copy to down upto we press
 Future create: 
 1. Calculator ----- completed
 2. Quiz app
-3. Rock Paper Scissors
+3. Rock Paper Scissors ----- in progress
 4. Note app
-5. Stopwatch app ----- in progress
+5. Stopwatch app ----- completed
 6. QR code reader
 7. Weather app
 8. Ecommerce Website ----- in progress
