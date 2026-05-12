@@ -1,11 +1,13 @@
 # Practice
 
+coolers website for generate color palet
+
 shift+alt+ down arrow key = The line copy to down upto we press
 
 Future create: 
 1. Calculator ----- completed
 2. Quiz app
-3. Rock Paper Scissors ----- in progress
+3. Rock Paper Scissors ----- completed
 4. Note app
 5. Stopwatch app ----- completed
 6. QR code reader
@@ -13,7 +15,7 @@ Future create:
 8. Ecommerce Website ----- in progress
 9. Landing page
 10. Password Generator ----- completed
-11. Tic Tac Toe game
+11. Tic Tac Toe game ----- completed
 12. Link Shortener website
 13. Portfolio website ----- in progress
 14. Drawing app
