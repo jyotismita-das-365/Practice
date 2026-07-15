@@ -5,8 +5,8 @@ exports.getAddHome = (req, res, next) => {
 };
 
 exports.postAddHome = (req, res, next) => {
-  const houseName = req.body.houseName;
-  const newHome = new Home(houseName);
+  const {houseName, price, location, rating, photoUrl} = req.body.houseName;
+  const newHome = new Home(houseName, price, location, rating, photoUrl);
   newHome.save();
   res.render("home-added", {pageTitle: 'Home Hosted'});
 };
