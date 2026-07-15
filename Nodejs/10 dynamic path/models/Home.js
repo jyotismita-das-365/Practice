@@ -14,10 +14,13 @@ module.exports = class Home {
   }
 
   save(callback) {
-    this.id = Math.random().toString();
     Home.fetchAll(registeredHomes => {
+      if(this.id){ //edit case
+      registeredHomes = registeredHomes.map(home => home.id !== this.id ? home : this);
+    }else { //new case
+      this.id = Math.random().toString();
       registeredHomes.push(this);
-
+    }
       fs.writeFile(homeFilePath, JSON.stringify(registeredHomes), callback);
     });
   }
@@ -36,6 +39,13 @@ module.exports = class Home {
     Home.fetchAll(homes => {
       const home = homes.find(home => home.id === homeId);
       callback(home);
+    })
+  }
+
+  static deleteById(homeId, callback) {
+    Home.fetchAll(homes => {
+      const newHomes = homes.filter(home => home.id !== homeId);
+      fs.writeFile(homeFilePath, JSON.stringify(newHomes), callback);
     })
   }
 }

@@ -1,3 +1,4 @@
+const Favourite = require("../models/Favourite");
 const Home = require("../models/Home");
 
 exports.getIndex = (req, res, next) => {
@@ -18,18 +19,36 @@ exports.getHomes = (req, res, next) => {
 };
 
 exports.getFavourites = (req, res, next) => {
-  Home.fetchAll((registeredHomes) => {
+  Favourite.fetchAll(FavouriteIds => {
+    Home.fetchAll((registeredHomes) => {
+      const favouriteHomes = registeredHomes.filter(home => FavouriteIds.includes(home.id));
     res.render("store/favourites", {
-      homes: registeredHomes,
+      homes: favouriteHomes,
       pageTitle: "Favourites",
     });
   });
+  })
 };
 
 exports.postAddFavourites = (req, res, next) => {
-  console.log("Came to add favourite", req.body);
-  res.redirect("/favourites");
+  const homeId = req.body.id;
+  Favourite.addToFavourites(homeId, error => {
+    if(error){
+      console.log("Error while adding to favourites", error);
+    }
+    res.redirect("/favourites");
+  });
 };
+
+exports.postRemoveFavourite = (req, res, next) => {
+  const homeId = res.params.homeId;
+  Favourite.deleteById(homeId, error => {
+    if(error) {
+      console.log('Error while remove from favourite', error);
+    }
+    res.redirect("/favourites");
+  })
+}
 
 exports.getHomeDetails = (req, res, next) => {
   const homeId = req.params.homeIdentity;
