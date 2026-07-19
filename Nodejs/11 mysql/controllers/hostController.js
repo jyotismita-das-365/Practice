@@ -1,4 +1,4 @@
-const Home = require("./../models/Home");
+const Home = require("../models/Home");
 
 exports.getAddHome = (req, res, next) => {
   res.render("host/edit-home", { editing: false, pageTitle: "Host Your Home" });
@@ -12,7 +12,8 @@ exports.getEditHome = (req, res, next) => {
     return res.redirect("/host/host-homes");
   }
 
-  Home.findById(homeId, (home) => {
+  Home.findById(homeId).then(([homes]) => {
+    const home = homes[0];
     if (!home) {
       console.log("Home not found for editing");
       return res.redirect("/host/host-homes");
@@ -32,7 +33,7 @@ exports.postAddHome = (req, res, next) => {
   const newHome = new Home(houseName, price, location, rating, photoUrl, description);
 
   newHome.save().then(([rows]) => {
-    res.render("host/home-added", {pageTitle: "Home Hosted"});
+    res.render("host/home-added", { pageTitle: "Home Hosted" });
   });
 };
 
@@ -40,28 +41,24 @@ exports.postEditHome = (req, res, next) => {
   const { id, houseName, price, location, rating, photoUrl, description } = req.body;
   const newHome = new Home(houseName, price, location, rating, photoUrl, description);
   newHome.id = id;
-  newHome.save((error) => {
-    if (error) {
-      console.log("Error while updating home", error);
-    } else {
-      res.redirect("/host/host-homes");
-    }
+  newHome.save().then(() => {
+    res.redirect("/host/host-homes");
+  }).catch(err => {
+    console.log("Error while updating home", err);
+    res.redirect("/host/host-homes");
   });
-}
+};
 
 exports.postDeleteHome = (req, res, next) => {
   const homeId = req.params.homeId;
   console.log("Came to delete ", homeId);
-  Home.deleteById(homeId, error => {
-    if (error) {
-      console.log("Error occured while deleting home: ", error);
-    }
+  Home.deleteById(homeId).then(() => {
     res.redirect("/host/host-homes");
-  })
-}
+  });
+};
 
 exports.getHostHomes = (req, res, next) => {
-  Home.fetchAll().then(([registeredHomes]) => {
+  Home.fetchAll().then(([registeredHomes])=> {
     res.render("host/host-homes", {
       homes: registeredHomes,
       pageTitle: "Host Homes",
