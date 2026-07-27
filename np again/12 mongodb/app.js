@@ -1,6 +1,14 @@
 // Core Modules
 const path = require("path");
 
+const mongodb = require("mongodb");
+const dns = require('dns');
+
+dns.setServers([
+  '1.1.1.1',
+  '8.8.8.8'
+])
+
 // External Module
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -22,10 +30,11 @@ app.use("/host", hostRouter);
 
 app.use(errorController.get404);
 
-const mongoConnect = require("./util/database-util");
+const {mongoConnect} = require("./util/database-util");
 const PORT = 3001;
-mongoConnect(client => {
+
+mongoConnect(() => {
   app.listen(PORT, () => {
-  console.log(`Server running at: http://localhost:${PORT}`);
+    console.log(`Server running at: http://localhost:${PORT}`);
 });
-});
+})

@@ -2,17 +2,28 @@ const mongodb = require('mongodb');
 
 const MongoClient = mongodb.MongoClient;
 
-const url = "mongodb+srv://root:root@airbnb.dolr28h.mongodb.net/?appName=airbnb"
+const url = "mongodb+srv://root:root@airbnb.ijpceov.mongodb.net/?appName=airbnb";
+
+let _db;
 
 const mongoConnect = (callback) => {
   MongoClient.connect(url)
-.then((client) => {
-  console.log(client);
-  callback(client);
-})
-.catch(error => {
-  console.log('Error came while connecting to mongoDB', error);
-})
+  .then((client) => {
+    console.log(client);
+    _db = client.db("airbnb");
+    callback();
+  })
+  .catch(error => {
+    console.log('Error came while connecting to mongodb', error);
+  });
+};
+
+const getDb = () => {
+  if(!_db){
+    throw new Error('Could not connect to DB')
+  }
+  return _db;
 }
 
-module.exports = mongoConnect;
+exports.mongoConnect = mongoConnect;
+exports.getDb = getDb;
