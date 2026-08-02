@@ -1,4 +1,4 @@
-const Home = require("./../models/Home");
+const Home = require("../models/Home");
 
 exports.getAddHome = (req, res, next) => {
   res.render("host/edit-home", { editing: false, pageTitle: "Host Your Home" });
@@ -14,9 +14,10 @@ exports.getEditHome = (req, res, next) => {
 
   Home.findById(homeId).then((home) => {
     if (!home) {
-      console.log("Homes not found for editing");
+      console.log("Home not found for editing");
       return res.redirect("/host/host-homes");
     }
+
     console.log(homeId, editing, home);
     res.render("host/edit-home", {
       home: home,
@@ -29,7 +30,15 @@ exports.getEditHome = (req, res, next) => {
 exports.postAddHome = (req, res, next) => {
   const { houseName, price, location, rating, photoUrl, description } =
     req.body;
-    console.log('Req body', houseName, price, location, rating, photoUrl, description);
+  console.log(
+    "Req body",
+    houseName,
+    price,
+    location,
+    rating,
+    photoUrl,
+    description
+  );
   const newHome = new Home({
     houseName,
     price,
@@ -37,7 +46,7 @@ exports.postAddHome = (req, res, next) => {
     rating,
     photoUrl,
     description,
-});
+  });
 
   newHome.save().then(() => {
     res.redirect("/host/host-homes");
@@ -47,11 +56,12 @@ exports.postAddHome = (req, res, next) => {
 exports.postEditHome = (req, res, next) => {
   const { id, houseName, price, location, rating, photoUrl, description } =
     req.body;
-    //business logic outside model
-    Home.findById(id).then(existingHome => {
-      if(!existingHome) {
-        console.log('Home not found for editing');
-        return res.redirect('/host/host-homes');
+  // business logic outside model
+  Home.findById(id)
+    .then((existingHome) => {
+      if (!existingHome) {
+        console.log("Home not found for editing");
+        return res.redirect("/host/host-homes");
       }
       existingHome.houseName = houseName;
       existingHome.price = price;
@@ -60,14 +70,15 @@ exports.postEditHome = (req, res, next) => {
       existingHome.photoUrl = photoUrl;
       existingHome.description = description;
       return existingHome.save();
-    }).finally(() => {
-      return res.redirect('/host/host-homes');
     })
+    .finally(() => {
+      return res.redirect("/host/host-homes");
+    });
 };
 
 exports.postDeleteHome = (req, res, next) => {
   const homeId = req.params.homeId;
-  console.log("Came to delete", homeId);
+  console.log("Came to delete ", homeId);
   Home.findByIdAndDelete(homeId).then(() => {
     res.redirect("/host/host-homes");
   });

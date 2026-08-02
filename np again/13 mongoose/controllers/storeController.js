@@ -5,10 +5,11 @@ exports.getIndex = (req, res, next) => {
   Home.find().then((registeredHomes) => {
     res.render("store/index", {
       homes: registeredHomes,
-      pageTitle: "Tumhara airbnb",
+      pageTitle: "Tumahara airbnb",
     });
   });
 };
+
 exports.getHomes = (req, res, next) => {
   Home.find().then((registeredHomes) => {
     res.render("store/homes", {
@@ -19,13 +20,22 @@ exports.getHomes = (req, res, next) => {
 };
 
 exports.getFavourites = (req, res, next) => {
-  Favourite.find().populate("homeId").then((favIdHomes) => {
-    const favouriteHomes = favIdHomes.map((favIdHome) => favIdHome.homeId);
+  Favourite.find()
+    .populate("homeId")
+    .then((favIdHomes) => {
+      const favouriteHomes = favIdHomes
+        .map((favIdHome) => favIdHome.homeId)
+        .filter((home) => home != null);
+
       res.render("store/favourites", {
         homes: favouriteHomes,
         pageTitle: "Favourites",
       });
-  });
+    })
+    .catch((err) => {
+      console.log("Error while fetching favourites", err);
+      next(err);
+    });
 };
 
 exports.postAddFavourites = (req, res, next) => {
@@ -49,7 +59,7 @@ exports.postRemoveFavourite = (req, res, next) => {
       res.redirect("/favourites");
     })
     .catch((error) => {
-      console.log("Error while remove from favourites", error);
+      console.log("Error while remove from favourites ", error);
       res.redirect("/favourites");
     });
 };
