@@ -22,7 +22,8 @@ exports.getEditHome = (req, res, next) => {
     res.render("host/edit-home", {
       home: home,
       editing: editing,
-      pageTitle: "Edit Your Home", isLoggedIn: req.isLoggedIn,
+      pageTitle: "Edit Your Home",
+      isLoggedIn: req.isLoggedIn,
     });
   });
 };

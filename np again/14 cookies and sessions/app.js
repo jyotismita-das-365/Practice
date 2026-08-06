@@ -5,8 +5,8 @@ const path = require("path");
 const express = require("express");
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
-  const dns = require('dns');
 
+const dns = require('dns');
 dns.setServers([
   '1.1.1.1',
   '8.8.8.8'
@@ -14,7 +14,7 @@ dns.setServers([
 
 // Local Module
 const { hostRouter } = require("./routers/hostRouter");
-const {authRouter} = require("./routers/authRouter");
+const { authRouter } = require("./routers/authRouter");
 const storeRouter = require("./routers/storeRouter");
 const rootDir = require("./util/path-util");
 const errorController = require('./controllers/errorController');
@@ -27,7 +27,7 @@ app.use(express.static(path.join(rootDir, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   console.log(req.get('Cookie'));
-  req.isLoggedIn = req.get('Cookie').split('=')[1] === 'false';
+  req.isLoggedIn = req.get('Cookie').split('=')[1] === 'true';
   next();
 });
 
@@ -37,7 +37,7 @@ app.use("/host", (req, res, next) => {
     return res.redirect("/login");
   }
   next();
-})
+});
 app.use("/host", hostRouter);
 app.use(authRouter);
 

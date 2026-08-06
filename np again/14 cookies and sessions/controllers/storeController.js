@@ -74,6 +74,6 @@ exports.getHomeDetails = (req, res, next) => {
       console.log("Home not found");
       return res.redirect("/homes");
     }
-    res.render("store/home-detail", { home: home, pageTitle: "Home Detail", isLoggedIn: req.isLoggedIn, });
+    res.render("store/home-detail", { home: home, pageTitle: "Home Detail", isLoggedIn: req.isLoggedIn });
   });
 };
